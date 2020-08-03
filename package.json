@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
+    "migrate-latest": "knex migrate:latest",
+    "migrate-rollback": "knex migrate:rollback",
     "seed": "knex seed:run",
     "test": "jest --watch"
   },
@@ -20,5 +22,8 @@
   },
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "knex": "^0.21.2",
+    "pg": "^8.3.0"
+  }
 }
