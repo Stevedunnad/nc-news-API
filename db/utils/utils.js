@@ -29,12 +29,12 @@ The rest of the comment's properties must be maintained
 exports.formatComments = (
   comments,
   lookup,
-  keyToAdd = "owner_id",
-  KeyToRemove = "owner"
+  keyToAdd = "article_id",
+  KeyToRemove = "belongs_to"
 ) => {
   const formattedComments = comments.map((comment) => {
-    const { [KeyToRemove]: lookupTarget, ...restOfComment } = comment;
-    const formattedComment = { ...restOfComment, [keyToAdd]: lookup[lookupTarget] };
+    const { [KeyToRemove]: lookupTarget, created_by, created_at, ...restOfComment } = comment;
+    const formattedComment = { ...restOfComment, [keyToAdd]: lookup[lookupTarget], author: created_by, created_at: new Date(created_at) };
     return formattedComment;
   });
 

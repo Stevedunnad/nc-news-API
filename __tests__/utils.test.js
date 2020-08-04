@@ -172,7 +172,7 @@ describe("formatComments", () => {
         slogan: "testSlogan",
       },
     ];
-    expect(formatComments(shops, lookup)[0]).toHaveProperty("owner_id");
+    expect(formatComments(shops, lookup, 'owner_id', 'owner')[0]).toHaveProperty("owner_id");
   });
   test("returns an array with items having owner key removed", () => {
     const owners = [
@@ -191,7 +191,7 @@ describe("formatComments", () => {
         slogan: "testSlogan",
       },
     ];
-    expect(formatComments(shops, lookup)[0]).not.toHaveProperty("owner");
+    expect(formatComments(shops, lookup, 'owner_id', 'owner')[0]).not.toHaveProperty("owner");
   });
   test("returns object with all other keys added", () => {
     const owners = [
@@ -210,7 +210,7 @@ describe("formatComments", () => {
         slogan: "testSlogan",
       },
     ];
-    expect(formatComments(shops, lookup)[0]).toEqual({
+    expect(formatComments(shops, lookup, 'owner_id', 'owner')[0]).toEqual({
       shop_name: "TestShop-1",
       owner_id: 1,
       slogan: "testSlogan",
@@ -238,7 +238,7 @@ describe("formatComments", () => {
         slogan: "testSlogan",
       },
     ];
-    expect(formatComments(shops, lookup)).toEqual([
+    expect(formatComments(shops, lookup, 'owner_id', 'owner')).toEqual([
       {
         shop_name: "TestShop-1",
         owner_id: 1,
@@ -275,7 +275,7 @@ describe("formatComments", () => {
         slogan: "testSlogan-2",
       },
     ];
-    expect(formatComments(shops, lookup)).toEqual([
+    expect(formatComments(shops, lookup, 'owner_id', 'owner')).toEqual([
       {
         shop_name: "TestShop-1",
         owner_id: 1,
@@ -314,7 +314,7 @@ describe("formatComments", () => {
         slogan: "testSlogan-2",
       },
     ];
-    formatComments(shops, lookup);
+    formatComments(shops, lookup, 'owner_id', 'owner');
     expect(shops).toEqual([
       {
         shop_name: "TestShop-1",

@@ -9,20 +9,31 @@ describe("/api", () => {
   beforeEach(() => {
     return connection.seed.run();
   });
-  after(() => {
+  afterAll(() => {
     return connection.destroy();
   });
 
   describe('topics', () => {
-    it('GET: returns an array of topics', () => {
+    test('GET: returns an array of topics', () => {
       return request(app)
       .get('/api/topics')
       .expect(200)
-      .then((res) => {
-        res.body.topics.forEach(topic => {
-          expect(topics.length).toBe(3)
-        })
+      .then(({body}) => {
+        expect(body.topics).toEqual(expect.arrayContaining([
+          expect.objectContaining({
+            description: expect.any(String),
+            slug: expect.any(String)
+          })
+        ]))
       })
+    })
+  })
+  test('ALL: 404 - non-existent path', () => {
+    return request(app)
+    .get('/api/tipocs')
+    .expect(404)
+    .then(res => {
+      expect(res.body.msg).toBe('This path does not exist')
     })
   })
 });
