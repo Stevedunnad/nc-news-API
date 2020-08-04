@@ -1,0 +1,12 @@
+You are now connected to database "nc_news_test" as user "stevedunn".
+                 List of relations
+ Schema |         Name         | Type  |   Owner   
+--------+----------------------+-------+-----------
+ public | articles             | table | stevedunn
+ public | comments             | table | stevedunn
+ public | knex_migrations      | table | stevedunn
+ public | knex_migrations_lock | table | stevedunn
+ public | topics               | table | stevedunn
+ public | users                | table | stevedunn
+(6 rows)
+
