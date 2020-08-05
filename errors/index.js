@@ -1,6 +1,6 @@
 
-const handlePSQL400s = () => {
-  (err, req, res, next) => {
+const handlePSQL400s = (err, req, res, next) => {
+    console.log('-->>', err)
     if (err.code === '22P02') {
       res
       .status(400)
@@ -8,18 +8,21 @@ const handlePSQL400s = () => {
     } else {
       next(err);
     };
-  }
-}
+  };
 
-const handleCustomErrors = () => {
-  (err, req, res, next) => {
-    if ('status' in err) {
-      res.status(err.status)
-      .send({msg: err.msg})
-    } else {
-      console.log('-->', err)
-    }
-  }
-};
+const handleCustomErrors = (err, req, res, next) => {
+      //if custom error...
+      if(err.hasOwnProperty('msg')) {
+        res.status(err.status)
+        .send({msg: err.msg})
+      } else {
+        next(err);
+      }
+  };
 
-module.exports = {handlePSQL400s, handleCustomErrors};
+  const handle500s = (err, req, res, next) => {
+    console.log('-=>>', err)
+    res.status(500).send({msg: 'server error!!'})
+  }
+
+module.exports = {handlePSQL400s, handleCustomErrors, handle500s};

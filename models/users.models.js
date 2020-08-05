@@ -5,4 +5,11 @@ exports.getUserByUsername = username => {
   .first("*")
   .from("users")
   .where("username", "=", username)
+  .then(response => {
+    if(response === undefined) {
+      return Promise.reject({status: 404, msg: 'username does not exist!'});
+    } else {
+      return response;
+    }
+  })
 };

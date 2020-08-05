@@ -56,12 +56,35 @@ describe("/api", () => {
   })
   test('GET: returns a 404 status and username not found', () => {
     return request(app)
-    .get('/api/users/jason')
+    .get('/api/users/jason123')
     .expect(404)
     .then(({body: {msg}}) => {
+      console.log('=*=>', msg)
       expect(msg).toBe('username does not exist!');
     })
   })
 })
 })
+describe.only('articles', () => {
+  test('GET: returns an article by article_id', () => {
+    return request(app)
+    .get('/api/articles/3')
+    .expect(200)
+    .then(({body:{article}}) => {
+      console.log('>->', article)
+        expect(article).toEqual(
+          expect.objectContaining({
+            article_id: expect(3),
+            title: expect.any(String),
+            body: expect.any(String),
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(String)
+          })
+        )
+      })
+    })
+  })
 });
