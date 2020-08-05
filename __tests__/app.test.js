@@ -14,7 +14,7 @@ describe("/api", () => {
   });
 
   describe('topics', () => {
-    test('GET: returns an array of topics', () => {
+    test('GET: returns a 200 status and an array of topics', () => {
       return request(app)
       .get('/api/topics')
       .expect(200)
@@ -36,4 +36,32 @@ describe("/api", () => {
       expect(res.body.msg).toBe('This path does not exist')
     })
   })
+  describe('users', () => {
+  describe('/api/users/:username', () => {
+  test('GET: returns a 200 status and user by username', () => {
+    return request(app)
+    .get('/api/users/lurker')
+    .expect(200)
+    .then(({body:{user}}) => {
+      console.log('-->', user)
+      expect(user).toEqual(
+        {
+          username: 'lurker',
+          name: 'do_nothing',
+          avatar_url:
+            'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
+        }
+      )
+    })
+  })
+  test('GET: returns a 404 status and username not found', () => {
+    return request(app)
+    .get('/api/users/jason')
+    .expect(404)
+    .then(({body: {msg}}) => {
+      expect(msg).toBe('username does not exist!');
+    })
+  })
+})
+})
 });

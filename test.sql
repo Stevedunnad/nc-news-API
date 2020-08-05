@@ -1,1 +1,2 @@
-\c nc_news_test \dt
+\c nc_news_test 
+select * from articles;
