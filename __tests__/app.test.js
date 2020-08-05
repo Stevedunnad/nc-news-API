@@ -43,7 +43,6 @@ describe("/api", () => {
     .get('/api/users/lurker')
     .expect(200)
     .then(({body:{user}}) => {
-      console.log('-->', user)
       expect(user).toEqual(
         {
           username: 'lurker',
@@ -63,27 +62,29 @@ describe("/api", () => {
       expect(msg).toBe('username does not exist!');
     })
   })
+});
+
 })
-})
-describe.only('articles', () => {
+describe('articles', () => {
   test('GET: returns an article by article_id', () => {
     return request(app)
     .get('/api/articles/3')
     .expect(200)
     .then(({body:{article}}) => {
-      console.log('>->', article)
-        expect(article).toEqual(
-          expect.objectContaining({
-            article_id: expect(3),
-            title: expect.any(String),
-            body: expect.any(String),
-            title: expect.any(String),
-            topic: expect.any(String),
-            author: expect.any(String),
-            votes: expect.any(Number),
-            comment_count: expect.any(String)
-          })
-        )
+        expect(article).toHaveProperty(
+          'article_id')
+        expect(article).toHaveProperty(
+          'body')
+        expect(article).toHaveProperty(
+          'title')
+        expect(article).toHaveProperty(
+          'topic')
+        expect(article).toHaveProperty(
+          'author')
+        expect(article).toHaveProperty(
+          'votes')
+        expect(article).toHaveProperty(
+          'comment_count')
       })
     })
   })
