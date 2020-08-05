@@ -53,7 +53,7 @@ describe("/api", () => {
       )
     })
   })
-  test('GET: returns a 404 status and username not found', () => {
+  test('GET: returns a 404 status when username not found', () => {
     return request(app)
     .get('/api/users/jason123')
     .expect(404)
@@ -87,5 +87,23 @@ describe('articles', () => {
           'comment_count')
       })
     })
+    test('GET: returns a 404 status when article_id not found', () => {
+      return request(app)
+      .get('/api/articles/69')
+      .expect(404)
+      .then(({body: {msg}}) => {
+        console.log('=*=>', msg)
+        expect(msg).toBe('artcicle_id does not exist!');
+      })
+    })
+    test('PATCH: updates articles.votes and returns updated vote', () => {
+      return request(app)
+      .patch('/api/articles/1')
+      .expect(201)
+      .then(({body:{article}}) => {
+        console.log('>--->', article)
+          // expect(article).toHaveProperty('article_id')
+        })
+      })   
   })
 });

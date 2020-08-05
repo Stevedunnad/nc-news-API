@@ -1,6 +1,6 @@
-const { getArticleByArticle_id } = require("../models/articles.models");
+const { getArticleByArticle_id, getUpdatedArticle } = require("../models/articles.models");
 
-sendArticleByArticle_id = (req, res, next) => {
+const sendArticleByArticle_id = (req, res, next) => {
   const {article_id} = req.params;
   return getArticleByArticle_id(article_id)
   .then(article => {
@@ -9,4 +9,15 @@ sendArticleByArticle_id = (req, res, next) => {
   .catch(next)
 };
 
-module.exports = {sendArticleByArticle_id};
+const patchArticleByArticle_id = (req, res, next) => {
+  const {article_id} = req.params;
+  console.log('-->', article_id)
+  return getUpdatedArticle(article_id)
+  .then(updatedArticle => {
+    console.log('++>>', updatedArticle)
+    res.status(201).send({updatedArticle});
+  })
+  .catch(next)
+}
+
+module.exports = {sendArticleByArticle_id, patchArticleByArticle_id};

@@ -1,6 +1,6 @@
 
 const handlePSQL400s = (err, req, res, next) => {
-    console.log('-->>', err)
+    console.log('-psql400->>', err)
     if (err.code === '22P02') {
       res
       .status(400)
@@ -21,7 +21,7 @@ const handleCustomErrors = (err, req, res, next) => {
   };
 
   const handle500s = (err, req, res, next) => {
-    console.log('-=>>', err)
+    console.log('-500->>', err)
     res.status(500).send({msg: 'server error!!'})
   }
 
