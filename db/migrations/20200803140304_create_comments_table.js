@@ -1,16 +1,14 @@
 exports.up = function (knex) {
-  console.log("creating comments table");
   return knex.schema.createTable("comments", commentsTable => {
     commentsTable.increments("comment_id").notNullable();
     commentsTable.text("author").references("users.username");
     commentsTable.text("body");
-    commentsTable.integer("article_id").references("articles.article_id");
+    commentsTable.integer("article_id").references("articles.article_id").notNullable();
     commentsTable.timestamp("created_at").defaultTo(knex.fn.now());
-    commentsTable.integer("votes");
+    commentsTable.integer("votes").defaultTo(0);
   });
 };
 
 exports.down = function (knex) {
-  console.log("removing comments table");
   return knex.schema.dropTable("comments");
 };

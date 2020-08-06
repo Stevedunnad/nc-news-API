@@ -25,7 +25,7 @@ exports.seed = function (knex) {
         .returning("*");
     })
     .then(articleRows => {
-      const articleRef = makeRefObj(articleRows);
+      const articleRef = makeRefObj(articleRows, 'title', 'article_id');
       const formattedComments = formatComments(commentData, articleRef, 'article_id', 'belongs_to');
       return knex('comments').insert(formattedComments);
     });
