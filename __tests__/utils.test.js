@@ -150,29 +150,31 @@ The rest of the comment's properties must be maintained
 
 describe("formatComments", () => {
   test("returns a new empty array when given an empty array and ", () => {
-    const shops = [];
-    const formattedComments = formatComments(shops);
+    const comments = [];
+    const formattedComments = formatComments(comments);
     expect(formattedComments).toEqual([]);
-    expect(formattedComments).not.toBe(shops);
+    expect(formattedComments).not.toBe(comments);
   });
   test("returns an array with items containing an owner_id key", () => {
-    const owners = [
+    const users = [
       {
-        forename: "Rosa",
-        surname: "Casper",
-        age: 56,
-        owner_id: 1,
+        username: 'butter_bridge',
+        name: 'jonny',
+        avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
       },
     ];
-    const lookup = makeRefObj(owners, "forename", "owner_id");
-    const shops = [
+    const lookup = makeRefObj(users, "username", "author");
+    const comments = [
       {
-        shop_name: "TestShop-1",
-        owner: "Rosa",
-        slogan: "testSlogan",
+        body:
+          "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        belongs_to: "They're not exactly dogs, are they?",
+        created_by: 'butter_bridge',
+        votes: 16,
+        created_at: 1511354163389,
       },
     ];
-    expect(formatComments(shops, lookup, 'owner_id', 'owner')[0]).toHaveProperty("owner_id");
+    expect(formatComments(comments, lookup, 'created_by', 'author')[0]).toHaveProperty("author");
   });
   test("returns an array with items having owner key removed", () => {
     const owners = [
@@ -194,15 +196,7 @@ describe("formatComments", () => {
     expect(formatComments(shops, lookup, 'owner_id', 'owner')[0]).not.toHaveProperty("owner");
   });
   test("returns object with all other keys added", () => {
-    const users = [
-      {
-        username: 'butter_bridge',
-        name: 'jonny',
-        avatar_url: 'https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg',
-      },
-    ];
-    const lookup = makeRefObj(users, "forename", "owner_id");
-    const shops = [
+    const comments = [
       {
         body:
           "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
@@ -212,10 +206,17 @@ describe("formatComments", () => {
         created_at: 1511354163389,
       },
     ];
+    const lookup = makeRefObj(users, "forename", "owner_id");
+    const users = [
+      {},
+    ];
     expect(formatComments(comments, lookup, 'owner_id', 'owner')[0]).toEqual({
-      shop_name: "TestShop-1",
-      owner_id: 1,
-      slogan: "testSlogan",
+      body:
+        "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+      article_id: "They're not exactly dogs, are they?",
+      author: 'butter_bridge',
+      votes: 16,
+      created_at: 1511354163389,
     });
   });
   test("works for arrays with multiple shops", () => {

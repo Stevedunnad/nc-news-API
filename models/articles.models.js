@@ -37,6 +37,28 @@ exports.getUpdatedComment = (article_id, body, author) => {
   .insert({body, author, article_id})
   .returning('*')
   .then((comments) => {
-    return comments[0]
+    if(comments === undefined) {
+      return Promise.reject({status: 400, msg: 'bad request!'})
+    } else {
+      return comments[0]
+    }
+  })
+}
+
+//how can i use the sort_query in my knex query?
+exports.getCommmentByArticleId = (article_id, sort_by) => {
+  console.log('SORT Q===>', sort_by)
+  return connection('comments')
+  .select('*')
+  .from('comments')
+  .where("comments.article_id", "=", article_id)
+  .orderBy(sort_by, 'desc')
+  .then(response => {
+    console.log('RES=>', response) //logs empty array - but it might mean there are no comments - how can I use Promise.all() to check db?
+    if(response === undefined) {
+      return Promise.reject({status: 404, msg: 'article_id does not exist!'});
+    } else {
+      return response;
+    }
   })
 }

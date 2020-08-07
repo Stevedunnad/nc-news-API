@@ -109,7 +109,6 @@ describe('articles', () => {
       .send({pink_votes: 0})
       .expect(200)
       .then(({body: {article}}) => {
-        console.log('=*=>', article)
         expect(article).toEqual(
           expect.objectContaining({
             title: expect.any(String),
@@ -122,16 +121,12 @@ describe('articles', () => {
         );
       })
      });
-     //the above test checks for valid id, but what about valid request...
-     //...also, should I have a test for PATCH to check if the object/property was changed as requested
-     
      test('POST: returns with posted comment from given article_id', () => {
        return request(app)
        .post('/api/articles/1/comments')
        .send({username: 'butter_bridge', body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!"})
        .expect(201)
        .then(({body:{comment}}) => {
-        console.log('>--->', comment)
         expect(comment).toEqual(
           expect.objectContaining({
             comment_id: expect.any(Number),
@@ -144,5 +139,65 @@ describe('articles', () => {
         )
       })
       })
+      //this test passes, but it's not doing what I want it to yet!
+      test('POST: returns a 200 when passing a request body without author key', () => {
+        return request(app)
+        .patch('/api/articles/7')
+        .send({body: "Lobster pot"})
+        .expect(200)
+        .then(({body: {comment}}) => {
+          expect(comment).toEqual(undefined);
+        })
+       });
+       test('GET: returns an array of comments for passed article_id', () => {
+         return request(app)
+         .get('/api/articles/1/comments')
+         .expect(200)
+         .then(({body:{comments}}) => {
+           expect(Array.isArray(comments)).toBe(true);
+           expect(comments.length).toBe(13);
+            expect(comments[0]).toHaveProperty('comment_id');
+            expect(comments[0]).toHaveProperty('votes');
+            expect(comments[0]).toHaveProperty('created_at');
+            expect(comments[0]).toHaveProperty('author');
+            expect(comments[0]).toHaveProperty('body');
+         })
+       })
+       test('GET: array is sorted by created_at', () => {
+         return request(app)
+         .get('/api/articles/1/comments?sort_by=created_at')
+         .expect(200)
+         .then(({body:{comments}}) => {
+           const mappedComments = comments.map(comment => {
+             return {created_at: new Date(comment.created_at)}
+           })
+          expect(mappedComments).toBeSortedBy("created_at", {
+            descending: true
+          });
+         })
+       })
+       test('GET: returns a 404 status when given valid article_id syntax, but article_id not found', () => {
+        return request(app)
+        .get('/api/articles/69/comments')
+        .expect(404) //still getting a 200!
+        .then(({body: {msg}}) => {
+          expect(msg).toEqual('article_id does not exist!');
+        })
+      })
+      test('GET: returns a 400 status when given invalid article_id syntax', () => {
+        return request(app)
+        .get('/api/articles/mango/comments')
+        .expect(400)
+        .then(({body: {msg}}) => {
+          expect(msg).toEqual('bad request');
+        })
+      })
+  })
+  describe('comments', () => {
+    test('DELETE: deletes a comment by comment_id and status 204 and no content', () => {
+      return request(app)
+        .delete('/api/comments/3')
+        .expect(204)
+    })
   })
 });
