@@ -1,5 +1,8 @@
 const connection = require("../db/connection");
 
-exports.confirmCommentDeleted = () => {
-  return connection.select("*").from("comments");
+exports.confirmCommentDeleted = (comment_id) => {
+  return connection
+  .del()
+  .from('comments')
+  .where('comment_id', '=', comment_id)
 };

@@ -1,4 +1,4 @@
-const { getArticleByArticle_id, getUpdatedArticle, getUpdatedComment, getCommmentByArticleId } = require("../models/articles.models");
+const { getArticleByArticle_id, getUpdatedArticle, getUpdatedComment, getCommmentsByArticle_id } = require("../models/articles.models");
 
 const sendArticleByArticle_id = (req, res, next) => {
   const {article_id} = req.params;
@@ -29,15 +29,14 @@ const postCommentByArticle_id = (req, res, next) => {
   .catch(next)
 }
 
-const sendCommentByArticle_id = (req, res ,next) => {
+const sendCommentsByArticle_id = (req, res ,next) => {
   const {article_id} = req.params;
   const {sort_by} = req.query;
-  console.log('SQ', req.query)
-  return getCommmentByArticleId(article_id, sort_by)
+  return getCommmentsByArticle_id(article_id, sort_by)
   .then((comments)=> {
     res.status(200).send({comments})
   })
   .catch(next)
 }
 
-module.exports = {sendArticleByArticle_id, patchArticleByArticle_id, postCommentByArticle_id, sendCommentByArticle_id};
+module.exports = {sendArticleByArticle_id, patchArticleByArticle_id, postCommentByArticle_id, sendCommentsByArticle_id};

@@ -27,15 +27,30 @@ describe("/api", () => {
         ]))
       })
     })
-  })
-  test('ALL: 404 - non-existent path', () => {
-    return request(app)
-    .get('/api/tipocs')
-    .expect(404)
-    .then(res => {
-      expect(res.body.msg).toBe('This path does not exist')
+    test('ALL: 404 - non-existent path', () => {
+      return request(app)
+      .get('/api/tipocs')
+      .expect(404)
+      .then(res => {
+        expect(res.body.msg).toBe('This path does not exist')
+      })
+    })
+    test('invalid methods', () => {
+      test('status: 405' ,() => {
+        const invalidMethods = ['patch', 'put', 'post', 'delete'];
+        const methodPromises = invalidMethods.map(method => {
+          return request(app)
+          [method]('/api/topics')
+          .expect(405)
+          .then(({body: {msg}}) => {
+            expect(msg).toBe('method not allowed!')
+          })
+        })
+        return Promise.all(methodPromises);
+      })
     })
   })
+
   describe('users', () => {
   describe('/api/users/:username', () => {
   test('GET: returns a 200 status and user by username', () => {
@@ -151,7 +166,7 @@ describe('articles', () => {
        });
        test('GET: returns an array of comments for passed article_id', () => {
          return request(app)
-         .get('/api/articles/1/comments')
+         .get('/api/articles/1/comments?sort_by=created_at')
          .expect(200)
          .then(({body:{comments}}) => {
            expect(Array.isArray(comments)).toBe(true);
@@ -196,7 +211,7 @@ describe('articles', () => {
   describe('comments', () => {
     test('DELETE: deletes a comment by comment_id and status 204 and no content', () => {
       return request(app)
-        .delete('/api/comments/3')
+        .delete('/api/comments/16')
         .expect(204)
     })
   })
